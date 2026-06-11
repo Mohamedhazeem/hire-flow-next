@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
+import { APIError } from "better-auth/api";
 
 type RegisterInput = z.infer<typeof signUpSchema>;
 type ActionResult =
@@ -22,27 +23,33 @@ export async function registerAction(data: unknown): Promise<ActionResult> {
     };
   }
 
+  let redirectTarget: "/dashboard" | null = null;
+
   try {
     const response = await auth.api.signUpEmail({
-      body: {
-        name: validation.data.name,
-        email: validation.data.email,
-        password: validation.data.password,
-      },
+      body: validation.data,
       headers: await headers(),
     });
 
-    if (!response.token) {
-      return {
-        success: false,
-        errors: {
-          email: ["This email is already registered or signup failed."],
-        },
-      };
+    if (response && response.token) {
+      redirectTarget = "/dashboard";
+    }
+  } catch (error: unknown) {
+    console.error("Signup detailed error:", error);
+    if (error instanceof APIError) {
+      if (
+        error.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL" ||
+        error.status === "UNPROCESSABLE_ENTITY"
+      ) {
+        return {
+          success: false,
+          errors: {
+            email: ["This email is already registered. Please use a different email or log in."],
+          },
+        };
+      }
     }
 
-    redirect("/dashboard");
-  } catch {
     return {
       success: false,
       errors: {
@@ -50,4 +57,10 @@ export async function registerAction(data: unknown): Promise<ActionResult> {
       },
     };
   }
+
+  if (redirectTarget) {
+    redirect(redirectTarget);
+  }
+
+  return { success: false, errors: { form: ["An unexpected routing state occurred."] } };
 }
