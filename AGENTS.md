@@ -29,6 +29,7 @@ description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · P
 - **npm only** — never yarn/pnpm/bun
 - **No secrets in source** — values in `.env.local`, names only in `.env.example`
 - **Minimal scope** — touch only files required by the task; no renames, refactors, or dep upgrades unless asked
+- **Don't Repeat Yourself (DRY) Styling** — If a task requires creating multiple forms or views that share structural wrappers, input styles, or button designs, preemptively extract them into shared primitives inside `components/ui/` or localized feature `components/`. Never copy-paste dense Tailwind utility chunks across files.
 
 ## Feature-Based Structure (target — all new code must follow this)
 
@@ -72,6 +73,8 @@ Pages are thin orchestrators. All logic lives in `features/`.
 - **Route handlers:** only for Better Auth catch-all, webhooks, or third-party REST consumers
 - **Auth middleware:** `auth.api.getSession({ headers: request.headers })` — redirect to `/login` if no session
 - **Auth catch-all:** `export const { GET, POST } = toNextJsHandler(auth)` in `app/api/auth/[...all]/route.ts`
+- **UI Component Extraction:** Always extract inputs with validation error states using `React.forwardRef` (compatible with React Hook Form) so they are highly reusable.
+- **Layout Orchestration:** Isolate shared page wrappers, animated backgrounds, and page shells into localized layout components (`auth-layout.tsx`) or standard Next.js layouts, keeping feature pages as thin orchestrators.
 
 ## Forbidden
 

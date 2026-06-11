@@ -1,19 +1,19 @@
 "use server";
 
-import { signInSchema } from "@/app/features/auth/types/auth-schema";
+import { SignInSchema } from "@/app/features/auth/types/auth-schema";
 import { validateWithZod } from "@/lib/validator";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
 
-type LoginInput = z.infer<typeof signInSchema>;
+type LoginInput = z.infer<typeof SignInSchema>;
 type ActionResult =
   | { success: true }
   | { success: false; errors: Record<string, string[] | undefined> };
 
 export async function loginAction(data: unknown): Promise<ActionResult> {
-  const validation = validateWithZod<LoginInput>(signInSchema, data);
+  const validation = validateWithZod<LoginInput>(SignInSchema, data);
 
   if (!validation.success) {
     return {

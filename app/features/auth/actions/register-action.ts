@@ -1,6 +1,6 @@
 "use server";
 
-import { signUpSchema } from "@/app/features/auth/types/auth-schema";
+import { SignUpSchema } from "@/app/features/auth/types/auth-schema";
 import { validateWithZod } from "@/lib/validator";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -8,13 +8,13 @@ import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { APIError } from "better-auth/api";
 
-type RegisterInput = z.infer<typeof signUpSchema>;
+type RegisterInput = z.infer<typeof SignUpSchema>;
 type ActionResult =
   | { success: true }
   | { success: false; errors: Record<string, string[] | undefined> };
 
 export async function registerAction(data: unknown): Promise<ActionResult> {
-  const validation = validateWithZod<RegisterInput>(signUpSchema, data);
+  const validation = validateWithZod<RegisterInput>(SignUpSchema, data);
 
   if (!validation.success) {
     return {

@@ -1,4 +1,4 @@
-import { RegisterForm } from "@/app/features/auth/components/register-form";
+import { SignUpForm } from "@/app/features/auth/components/signup-form";
 
 export const metadata = {
   title: "Register",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  return <SignUpForm />;
 }

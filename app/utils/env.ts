@@ -10,6 +10,6 @@ export const envSchema = z.object({
   DATABASE_URL: z.string(),
 });
 
-export type envTypes = z.infer<typeof envSchema>;
+export type EnvTypes = z.infer<typeof envSchema>;
 
 export const env = envSchema.safeParse(process.env);

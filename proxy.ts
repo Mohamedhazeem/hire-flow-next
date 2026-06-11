@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-export async function proxy(request: NextRequest) {
+const authPages = ["/login", "/register"];
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: request.headers,
   });
 
-  if (!session) {
+  const isAuthPage = authPages.includes(pathname);
+
+  if (session && isAuthPage) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (!session && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -15,5 +23,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard/:path*", "/login", "/register"],
 };
