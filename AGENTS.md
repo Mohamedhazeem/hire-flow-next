@@ -1,5 +1,5 @@
 ---
-description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · Prisma 7/PG · Better Auth 1.6 · RHF 7 · Zod 4
+description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · Motion · Lucid · Prisma 7/PG · Better Auth 1.6 · RHF 7 · Zod 4
 ---
 
 # hire-flow-next — Agent Rules
@@ -16,6 +16,8 @@ description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · P
 | Auth               | better-auth@1.6.15 + `@better-auth/prisma-adapter`                                        |
 | Forms / Validation | react-hook-form@7 + `@hookform/resolvers` + zod@4                                         |
 | Compiler           | babel-plugin-react-compiler (no manual `useMemo`/`useCallback`/`memo`)                    |
+| Styling & Icons    | tailwindcss@4 + lucide-react (Config via `globals.css @theme {}`, no config files)        |
+| Animation          | Motion (`motion`) — Best for micro-interactions & layout animations in React 19           |
 
 ## Absolute Rules
 
@@ -75,6 +77,18 @@ Pages are thin orchestrators. All logic lives in `features/`.
 - **Auth catch-all:** `export const { GET, POST } = toNextJsHandler(auth)` in `app/api/auth/[...all]/route.ts`
 - **UI Component Extraction:** Always extract inputs with validation error states using `React.forwardRef` (compatible with React Hook Form) so they are highly reusable.
 - **Layout Orchestration:** Isolate shared page wrappers, animated backgrounds, and page shells into localized layout components (`auth-layout.tsx`) or standard Next.js layouts, keeping feature pages as thin orchestrators.
+
+## Theme & Icon Rules
+
+- **Tokens Only:** Never use arbitrary Tailwind values (no `[...]`). Use `@theme` variables: `text-text-body`, `bg-bg-surface`, `p-spacing-4`, `rounded-radius-md`.
+- **Lucide Icons:** Destructure from `'lucide-react'`. Use Tailwind v4 `size-4` or `size-5` with `strokeWidth={2}` (or `1.5`). Match icon color to text context (`text-text-muted`).
+- **Layout:** Enforce layout constraints via `max-w-(--container-width)` or strict `p-spacing-20` equivalents.
+
+## Animation Rules
+
+- **Tailwind Native First:** Use built-in utilities (`animate-fade-in`, `transition-all`, `duration-200`) for simple hover states, transitions, status pickers, and entry fades.
+- **Framer Motion for Orchestration:** Use `motion/react` and `motion/react-client` (`motion.div`) _only_ for complex multi-step orchestration, layout transitions (`layoutId`), dynamic presence (`AnimatePresence`), or interactive sidebars.
+- **Performance:** Keep animation durations under `300ms` for core UI. Prefer `transform` and `opacity` mutations over animating layout properties like `height`, `width`, or `margin`.
 
 ## Forbidden
 
