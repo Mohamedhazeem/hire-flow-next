@@ -20,7 +20,7 @@ export async function proxy(request: NextRequest) {
   if (session && isAuthPage) {
     if (userRole === "ADMIN") {
       return NextResponse.redirect(new URL("/admin", request.url));
-    } else if (userRole === "EMPLOYER") {
+    } else if (userRole === "RECRUITER") {
       return NextResponse.redirect(new URL("/company", request.url));
     } else {
       return NextResponse.redirect(new URL("/user", request.url));

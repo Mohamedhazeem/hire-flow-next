@@ -13,8 +13,8 @@ datasource db {
 }
 
 enum Role {
-  JOB_SEEKER
-  EMPLOYER
+  USER
+  RECRUITER
   ADMIN
 }
 
@@ -23,7 +23,7 @@ model User {
   name          String
   email         String
   emailVerified Boolean   @default(false)
-  role          Role      @default(JOB_SEEKER)
+  role          Role      @default(USER)
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

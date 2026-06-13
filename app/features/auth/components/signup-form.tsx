@@ -25,10 +25,10 @@ export function SignUpForm() {
   } = useForm<RegisterInput>({
     resolver: zodResolver(SignUpSchema),
     mode: "onChange",
-    defaultValues: { role: "JOB_SEEKER" },
+    defaultValues: { role: "USER" },
   });
 
-  const [selectedRole, setSelectedRole] = useState<"RECRUITER" | "JOB_SEEKER">("JOB_SEEKER");
+  const [selectedRole, setSelectedRole] = useState<"RECRUITER" | "USER">("USER");
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
@@ -70,11 +70,11 @@ export function SignUpForm() {
           <button
             type="button"
             onClick={() => {
-              setSelectedRole("JOB_SEEKER");
-              setValue("role", "JOB_SEEKER", { shouldDirty: true, shouldTouch: true });
+              setSelectedRole("USER");
+              setValue("role", "USER", { shouldDirty: true, shouldTouch: true });
             }}
             className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all ${
-              selectedRole === "JOB_SEEKER"
+              selectedRole === "USER"
                 ? "bg-brand text-text-inverse shadow-sm shadow-brand/20"
                 : "text-text-body hover:bg-bg-surface"
             }`}

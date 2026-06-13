@@ -20,5 +20,5 @@ export const SignInSchema = z.object({
 // 2. Extend the base schema cleanly to create the registration schema
 export const SignUpSchema = SignInSchema.extend({
   name: z.string().min(4, "Name must be at least 4 characters long"),
-  role: RoleSchema.default("JOB_SEEKER"),
+  role: RoleSchema.default("USER"),
 });
