@@ -24,7 +24,7 @@ export function FormInput({ label, id, error, register, ...props }: FormInputPro
           error
             ? "border-error/50 focus:border-error focus:ring-2 focus:ring-error/20"
             : "border-border-subtle focus:border-input-focus focus:ring-2 focus:ring-brand/20"
-        } text-text-inverse placeholder-text-muted`}
+        } text-text-body placeholder-text-muted`}
       />
       {error && (
         <p className="text-sm text-error flex items-center gap-1">
