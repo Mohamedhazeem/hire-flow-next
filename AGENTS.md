@@ -51,7 +51,7 @@ components/ui/    ← shared primitives
 components/layout/
 lib/auth.ts  auth-client.ts  prisma.ts  utils.ts
 types/index.ts    ← cross-feature types
-middleware.ts     ← session check + redirect
+proxy.ts     ← session check + redirect
 ```
 
 Pages are thin orchestrators. All logic lives in `features/`.

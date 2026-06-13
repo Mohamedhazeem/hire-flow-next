@@ -6,12 +6,12 @@ import { FormButton } from "./form-button";
 import { FormInput } from "./form-input";
 import { registerAction } from "../actions/register-action";
 import { useForm } from "react-hook-form";
-import { SignUpSchema } from "../types/auth-schema";
+import { SignUpSchema } from "../schema/auth-schema";
 import { z } from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-type RegisterInput = z.infer<typeof SignUpSchema>;
+type RegisterInput = z.input<typeof SignUpSchema>;
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +20,15 @@ export function SignUpForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(SignUpSchema),
     mode: "onChange",
+    defaultValues: { role: "JOB_SEEKER" },
   });
+
+  const [selectedRole, setSelectedRole] = useState<"RECRUITER" | "JOB_SEEKER">("JOB_SEEKER");
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
@@ -46,6 +50,41 @@ export function SignUpForm() {
   return (
     <AuthLayout title="Create an account" subtitle="Start your hiring flow with a secure login">
       <form onSubmit={onSubmit} className="space-y-6">
+        {/* Role tabs */}
+        <div className="flex gap-2 bg-slate-700/30 p-1 rounded-lg">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedRole("RECRUITER");
+              setValue("role", "RECRUITER", { shouldDirty: true, shouldTouch: true });
+            }}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
+              selectedRole === "RECRUITER"
+                ? "bg-slate-800 text-white"
+                : "text-slate-300 hover:bg-slate-700/40"
+            }`}
+          >
+            Looking to hire
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedRole("JOB_SEEKER");
+              setValue("role", "JOB_SEEKER", { shouldDirty: true, shouldTouch: true });
+            }}
+            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
+              selectedRole === "JOB_SEEKER"
+                ? "bg-slate-800 text-white"
+                : "text-slate-300 hover:bg-slate-700/40"
+            }`}
+          >
+            Looking for job
+          </button>
+        </div>
+
+        {/* hidden role input registered with RHF */}
+        <input type="hidden" {...register("role")} />
         {formError && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">
             {formError}

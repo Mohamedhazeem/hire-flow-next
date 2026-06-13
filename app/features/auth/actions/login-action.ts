@@ -1,8 +1,8 @@
 "use server";
 
-import { SignInSchema } from "@/app/features/auth/types/auth-schema";
-import { validateWithZod } from "@/lib/validator";
-import { auth } from "@/lib/auth";
+import { SignInSchema } from "@/app/features/auth/schema/auth-schema";
+import { validateWithZod } from "@/app/lib/validator";
+import { auth } from "@/app/features/auth/libs/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
