@@ -1,5 +1,5 @@
 ---
-description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · Motion · Lucid · Prisma 7/PG · Better Auth 1.6 · RHF 7 · Zod 4
+description: hire-flow-next · Next.js 16 · React 19 · TS5 · Tailwind v4 · Shadcn UI · Motion · Lucid · Prisma 7/PG · Better Auth 1.6 · RHF 7 · Zod 4
 ---
 
 # hire-flow-next — Agent Rules
@@ -83,6 +83,11 @@ Pages are thin orchestrators. All logic lives in `features/`.
 - **Tokens Only:** Never use arbitrary Tailwind values (no `[...]`). Use `@theme` variables: `text-text-body`, `bg-bg-surface`, `p-spacing-4`, `rounded-radius-md`.
 - **Lucide Icons:** Destructure from `'lucide-react'`. Use Tailwind v4 `size-4` or `size-5` with `strokeWidth={2}` (or `1.5`). Match icon color to text context (`text-text-muted`).
 - **Layout:** Enforce layout constraints via `max-w-(--container-width)` or strict `p-spacing-20` equivalents.
+
+## Shadcn UI Harmonization
+
+- **Installation:** Install components using `npx shadcn@latest add <component>`. All primitives must reside strictly in `components/ui/`.
+- **Theme Bridging:** Bridge Shadcn to the custom design system by mapping its semantic tokens to your custom theme variables within the `globals.css` `@theme inline` block instead of maintaining raw separate colors.
 
 ## Animation Rules
 
