@@ -1,11 +1,13 @@
 "use server";
 
-import { SignInSchema } from "@/app/features/auth/schema/auth-schema";
+import { SignInSchema } from "@/app/features/auth/schema/auth.schema";
 import { validateWithZod } from "@/app/lib/validator";
 import { auth } from "@/app/features/auth/libs/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
+import { authError } from "../utils/authError";
+import { getRedirectPath } from "../utils/getRedirectPath";
 
 type LoginInput = z.infer<typeof SignInSchema>;
 type ActionResult =
@@ -21,7 +23,7 @@ export async function loginAction(data: unknown): Promise<ActionResult> {
       errors: validation.error.fieldErrors,
     };
   }
-
+  let redirectUrl: string | null = null;
   try {
     const response = await auth.api.signInEmail({
       body: {
@@ -31,22 +33,22 @@ export async function loginAction(data: unknown): Promise<ActionResult> {
       headers: await headers(),
     });
 
-    if (!response.token) {
-      return {
-        success: false,
-        errors: {
-          email: ["Invalid email or password."],
-        },
-      };
+    if (response?.token && response.user?.role) {
+      redirectUrl = getRedirectPath(response.user);
     }
-
-    redirect("/dashboard");
-  } catch {
-    return {
-      success: false,
-      errors: {
-        form: ["Unable to sign in. Please try again later."],
-      },
-    };
+  } catch (error: unknown) {
+    const parsedAuthError = authError(error, "LOGIN");
+    if (parsedAuthError) {
+      return parsedAuthError;
+    }
   }
+  if (redirectUrl) {
+    redirect(redirectUrl);
+  }
+  return {
+    success: false,
+    errors: {
+      form: ["Unable to sign in. Please try again later."],
+    },
+  };
 }

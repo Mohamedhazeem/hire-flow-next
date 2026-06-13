@@ -1,6 +1,6 @@
 import { env } from "@/app/utils/env";
 import { z } from "zod";
-import { RoleSchema } from "./role-schema";
+import { RoleSchema } from "./role.schema";
 import disposableDomains from "disposable-email-domains";
 
 const disposableSet = new Set(disposableDomains);

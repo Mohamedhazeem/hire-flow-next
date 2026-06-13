@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/app/features/auth/libs/auth-client";
-import { Role, RoleSchema } from "../schema/role-schema";
+import { RoleType, RoleSchema } from "../schema/role.schema";
 
-export function useCheckRole(allowedRoles: Role[]) {
+export function useCheckRole(allowedRoles: RoleType[]) {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 

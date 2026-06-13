@@ -1,9 +1,9 @@
 import { auth } from "@/app/features/auth/libs/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Role, RoleSchema } from "../schema/role-schema";
+import { RoleType, RoleSchema } from "../schema/role.schema";
 
-export async function checkRole(allowedRoles: Role[]) {
+export async function checkRole(allowedRoles: RoleType[]) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

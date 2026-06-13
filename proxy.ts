@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/features/auth/libs/auth";
+import { getRedirectPath } from "./app/features/auth/utils/getRedirectPath";
 
 const authPages = ["/login", "/register"];
-const protectedRoutes = ["/admin", "/company", "/user"];
+const protectedRoutes = ["/admin", "/recruiter", "/user"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,20 +15,12 @@ export async function proxy(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
-  const userRole = session?.user ? (session.user as { role: string }).role : undefined;
-
   // 1. SIGNED-IN USERS: Redirect if they touch auth pages OR the generic /dashboard root
   if (session && isAuthPage) {
-    if (userRole === "ADMIN") {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    } else if (userRole === "RECRUITER") {
-      return NextResponse.redirect(new URL("/company", request.url));
-    } else {
-      return NextResponse.redirect(new URL("/user", request.url));
-    }
+    const redirectPath = getRedirectPath(session.user);
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
-
-  // 2. GUEST USERS: Kick them out if they try to access any protected route
+  // 2. UNAUTHENTICATED USERS: Redirect if they touch protected routes
   if (!session && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -36,5 +29,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/company/:path*", "/user/:path*", "/login", "/register"],
+  matcher: ["/admin/:path*", "/recruiter/:path*", "/user/:path*", "/login", "/register"],
 };

@@ -6,7 +6,7 @@ import { FormButton } from "./form-button";
 import { FormInput } from "./form-input";
 import { loginAction } from "../actions/login-action";
 import { useForm } from "react-hook-form";
-import { SignInSchema } from "../schema/auth-schema";
+import { SignInSchema } from "../schema/auth.schema";
 import { z } from "zod";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,17 +1,13 @@
 "use server";
 
-import { SignUpSchema } from "@/app/features/auth/schema/auth-schema";
+import { SignUpSchema } from "@/app/features/auth/schema/auth.schema";
 import { validateWithZod } from "@/app/lib/validator";
 import { auth } from "@/app/features/auth/libs/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import type { z } from "zod";
-import { APIError } from "better-auth/api";
-
-type RegisterInput = z.infer<typeof SignUpSchema>;
-type ActionResult =
-  | { success: true }
-  | { success: false; errors: Record<string, string[] | undefined> };
+import { ActionResult, RegisterInput } from "../schema/auth.type";
+import { authError } from "../utils/authError";
+import { getRedirectPath } from "../utils/getRedirectPath";
 
 export async function registerAction(data: unknown): Promise<ActionResult> {
   const validation = validateWithZod<RegisterInput>(SignUpSchema, data);
@@ -22,8 +18,7 @@ export async function registerAction(data: unknown): Promise<ActionResult> {
       errors: validation.error.fieldErrors,
     };
   }
-
-  let redirectTarget: "/dashboard" | null = null;
+  let redirectUrl: string | null = null;
 
   try {
     const response = await auth.api.signUpEmail({
@@ -31,36 +26,22 @@ export async function registerAction(data: unknown): Promise<ActionResult> {
       headers: await headers(),
     });
 
-    if (response && response.token) {
-      redirectTarget = "/dashboard";
+    if (response?.token && response.user?.role) {
+      redirectUrl = getRedirectPath(response.user);
     }
   } catch (error: unknown) {
-    console.error("Signup detailed error:", error);
-    if (error instanceof APIError) {
-      if (
-        error.body?.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL" ||
-        error.status === "UNPROCESSABLE_ENTITY"
-      ) {
-        return {
-          success: false,
-          errors: {
-            email: ["This email is already registered. Please use a different email or log in."],
-          },
-        };
-      }
+    const parsedAuthError = authError(error, "SIGNUP");
+    if (parsedAuthError) {
+      return parsedAuthError;
     }
-
-    return {
-      success: false,
-      errors: {
-        form: ["Unable to create your account. Please try again later."],
-      },
-    };
   }
 
-  if (redirectTarget) {
-    redirect(redirectTarget);
+  if (redirectUrl) {
+    redirect(redirectUrl);
   }
 
-  return { success: false, errors: { form: ["An unexpected routing state occurred."] } };
+  return {
+    success: false,
+    errors: { form: ["Unable to create your account. Please try again later."] },
+  };
 }
