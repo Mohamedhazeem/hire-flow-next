@@ -10,7 +10,7 @@ export function FormButton({ isLoading, loadingText, submitText }: FormButtonPro
     <button
       type="submit"
       disabled={isLoading}
-      className="w-full py-3 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      className="w-full py-3 bg-button-primary hover:bg-button-primary-hover text-button-primary-text font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
     >
       {isLoading ? (
         <>

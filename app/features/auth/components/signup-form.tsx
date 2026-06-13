@@ -51,17 +51,17 @@ export function SignUpForm() {
     <AuthLayout title="Create an account" subtitle="Start your hiring flow with a secure login">
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Role tabs */}
-        <div className="flex gap-2 bg-slate-700/30 p-1 rounded-lg">
+        <div className="flex gap-2 bg-input-bg/30 p-1 rounded-2xl border border-border-subtle">
           <button
             type="button"
             onClick={() => {
               setSelectedRole("RECRUITER");
               setValue("role", "RECRUITER", { shouldDirty: true, shouldTouch: true });
             }}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all ${
               selectedRole === "RECRUITER"
-                ? "bg-slate-800 text-white"
-                : "text-slate-300 hover:bg-slate-700/40"
+                ? "bg-brand text-text-inverse shadow-sm shadow-brand/20"
+                : "text-text-body hover:bg-bg-surface"
             }`}
           >
             Looking to hire
@@ -73,10 +73,10 @@ export function SignUpForm() {
               setSelectedRole("JOB_SEEKER");
               setValue("role", "JOB_SEEKER", { shouldDirty: true, shouldTouch: true });
             }}
-            className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
+            className={`flex-1 py-3 text-sm font-semibold rounded-xl transition-all ${
               selectedRole === "JOB_SEEKER"
-                ? "bg-slate-800 text-white"
-                : "text-slate-300 hover:bg-slate-700/40"
+                ? "bg-brand text-text-inverse shadow-sm shadow-brand/20"
+                : "text-text-body hover:bg-bg-surface"
             }`}
           >
             Looking for job
@@ -86,7 +86,7 @@ export function SignUpForm() {
         {/* hidden role input registered with RHF */}
         <input type="hidden" {...register("role")} />
         {formError && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">
+          <div className="bg-error/10 border border-error/50 text-error px-4 py-3 rounded-lg text-sm">
             {formError}
           </div>
         )}
@@ -121,11 +121,11 @@ export function SignUpForm() {
         <FormButton isLoading={isLoading} loadingText="Creating account..." submitText="Sign Up" />
 
         <div className="text-center">
-          <p className="text-slate-400 text-sm">
+          <p className="text-text-muted text-sm">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+              className="text-text-link hover:text-text-heading font-semibold transition-colors"
             >
               Sign in
             </Link>

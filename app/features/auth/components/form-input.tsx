@@ -13,22 +13,22 @@ interface FormInputProps {
 export function FormInput({ label, id, error, register, ...props }: FormInputProps) {
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="block text-sm font-medium text-slate-200">
+      <label htmlFor={id} className="block text-sm font-medium text-text-heading">
         {label}
       </label>
       <input
         {...props}
         {...register}
         id={id}
-        className={`w-full px-4 py-3 bg-slate-700/50 border rounded-lg focus:outline-none transition-colors ${
+        className={`w-full px-4 py-3 bg-input-bg border rounded-lg focus:outline-none transition-colors ${
           error
-            ? "border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
-            : "border-slate-600/50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-        } text-white placeholder-slate-500`}
+            ? "border-error/50 focus:border-error focus:ring-2 focus:ring-error/20"
+            : "border-border-subtle focus:border-input-focus focus:ring-2 focus:ring-brand/20"
+        } text-text-inverse placeholder-text-muted`}
       />
       {error && (
-        <p className="text-sm text-red-400 flex items-center gap-1">
-          <span className="text-red-500">•</span>
+        <p className="text-sm text-error flex items-center gap-1">
+          <span className="text-error">•</span>
           {error.message}
         </p>
       )}

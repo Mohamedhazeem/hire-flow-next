@@ -47,7 +47,7 @@ export function LoginForm() {
     <AuthLayout title="Welcome Back" subtitle="Sign in to your account">
       <form onSubmit={onSubmit} className="space-y-6">
         {formError && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg text-sm">
+          <div className="bg-error/10 border border-error/50 text-error px-4 py-3 rounded-lg text-sm">
             {formError}
           </div>
         )}
@@ -73,11 +73,11 @@ export function LoginForm() {
         <FormButton isLoading={isLoading} loadingText="Signing in..." submitText="Sign In" />
 
         <div className="text-center">
-          <p className="text-slate-400 text-sm">
+          <p className="text-text-muted text-sm">
             Don&apos;t have an account?{" "}
             <Link
               href="/register"
-              className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+              className="text-text-link hover:text-text-heading font-semibold transition-colors"
             >
               Sign up
             </Link>
