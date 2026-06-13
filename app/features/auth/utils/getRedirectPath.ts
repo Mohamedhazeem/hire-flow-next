@@ -1,9 +1,10 @@
 import { AuthRedirectTargetType, User, UserCredentials } from "../schema/auth.type";
 import { Roles } from "../schema/role.schema";
 
-export function getRedirectPath(response: User): AuthRedirectTargetType {
+export function getRedirectPath(response: User | UserCredentials): AuthRedirectTargetType {
   let redirectTarget: AuthRedirectTargetType = "/";
-  switch (response.role) {
+  const role = (response as User).role ?? (response as UserCredentials).user?.role;
+  switch (role) {
     case Roles.ADMIN:
       redirectTarget = "/admin";
       break;
